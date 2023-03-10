@@ -4,7 +4,7 @@
 	"main": "server.js",
 	"license": "MIT",
 	"scripts": {
-		"start": "nodemon server"
+		"start": "nodemon src/server"
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.0",
@@ -12,8 +12,9 @@
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
 		"express": "^4.18.2",
+		"express-validator": "^6.15.0",
 		"helmet": "^6.0.1",
-		"mongoose": "^7.0.1"
+		"mongoose": "6.10.0"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.21"
