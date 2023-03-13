@@ -19,7 +19,9 @@ app.use(helmet())
 app.use(compression())
 
 //handle rhe routes.
+app.use('/api', require('./routes/admin/authRoute'))
 app.use('/api', require('./routes/authRoute'))
+app.use('/api', require('./routes/categoryRoute'))
 
 //listen to the app.
 app.listen(process.env.PORT, error => {

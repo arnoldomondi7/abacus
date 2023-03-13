@@ -61,6 +61,13 @@ userSchema.virtual('password').set(function (password) {
 	user.hashed_password = bcrypt.hashSync(password, salt)
 })
 
+//create a virtual for fullname.
+userSchema.virtual('fullName').get(function () {
+	const user = this
+
+	const fullName = `${user.firstName} ${user.lastName}`
+	return fullName
+})
 //create the methods that will handle the authentication.
 userSchema.methods = {
 	authenticate: function (password) {

@@ -1,13 +1,14 @@
-const User = require('../models/userModel')
+const User = require('../../models/userModel')
 const jwt = require('jsonwebtoken')
 
-//function to sign up the user.
+//function to sign up the admin.
 exports.signUp = (req, res) => {
 	//ensure that the user is not already registered.
 	User.findOne({ email: req.body.email }).exec((error, user) => {
+		//if the user is already registered log an error
 		if (user) {
 			return res.status(400).json({
-				message: 'User With This Email Is Alredy Registered!',
+				message: 'Admin With This Email Is Alredy Registered!',
 			})
 		}
 
@@ -21,6 +22,7 @@ exports.signUp = (req, res) => {
 			email,
 			password,
 			username: Math.random().toString(),
+			role: 'admin',
 		})
 
 		//save the user.
@@ -29,13 +31,13 @@ exports.signUp = (req, res) => {
 			//handle the error.
 			if (error) {
 				return res.status(400).json({
-					message: 'Unable to Register the User.',
+					message: 'Unable to Register the Admin.',
 				})
 			}
 			//send the data to the user frontend if it worksout well.
 			if (data) {
 				return res.status(201).json({
-					message: 'New User Created',
+					message: 'New Admin Created',
 				})
 			}
 		})
@@ -53,8 +55,9 @@ exports.signinUser = (req, res) => {
 
 		//handle the user.
 		if (user) {
-			//conpare the passwords.
-			if (user.authenticate(req.body.password)) {
+			//compare the passwords.
+			//ensure that the user is admin.
+			if (user.authenticate(req.body.password) && user.role === 'admin') {
 				//create the token,
 				const token = jwt.sign(
 					{ _id: user._id, role: user.role },
