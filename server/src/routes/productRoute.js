@@ -1,17 +1,12 @@
 const express = require('express')
-
-//controller to create the category.
-const {
-	addCategory,
-	getCategories,
-} = require('../controllers/categoryController')
 const {
 	requireSignedin,
 	adminMiddleware,
 } = require('../utils/middlewares/middleware')
+const { createProduct } = require('../controllers/productController')
 
-//should be used by both the user and the admin of the application.
-const categoryRoute = express.Router()
+//create the product.
+const productRoute = express.Router()
 
 //multer and image uploads.
 const multer = require('multer')
@@ -35,15 +30,12 @@ const storage = multer.diskStorage({
 //dest=> where the file wil be uploaded.
 const upload = multer({ storage })
 
-//create a categiry.
-categoryRoute.post(
-	'/category/create',
+productRoute.post(
+	'/product/create',
 	requireSignedin,
 	adminMiddleware,
-	upload.single('categoryImage'),
-	addCategory
+	upload.array('productPicture'),
+	createProduct
 )
-//fetch the categiies.
-categoryRoute.get('/category/getcategories', getCategories)
 
-module.exports = categoryRoute
+module.exports = productRoute

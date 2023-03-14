@@ -9,6 +9,13 @@ exports.addCategory = (req, res) => {
 		slug: slugify(req.body.name),
 	}
 
+	//check if there is a file image,
+	//if it does extract the image.
+	if (req.file) {
+		categoryObject.categoryImage =
+			process.env.API + '/public/' + req.file.filename
+	}
+
 	//logical check to see if there is a parentID,
 	//if it does then the item becomes a sub-category.
 	if (req.body.parentId) {

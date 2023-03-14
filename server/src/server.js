@@ -22,6 +22,8 @@ app.use(compression())
 app.use('/api', require('./routes/admin/authRoute'))
 app.use('/api', require('./routes/authRoute'))
 app.use('/api', require('./routes/categoryRoute'))
+app.use('/api', require('./routes/productRoute'))
+app.use('/api', require('./routes/cartRoute'))
 
 //listen to the app.
 app.listen(process.env.PORT, error => {
