@@ -17,9 +17,8 @@ exports.addCategory = (req, res) => {
 	}
 
 	//logical check to see if there is a parentID,
-	//if it does then the item becomes a sub-category.
+	//if it does then include the parent ID in the db.
 	if (req.body.parentId) {
-		//the item will be a child category.
 		categoryObject.parentId = req.body.parentId
 	}
 
@@ -59,6 +58,7 @@ const createCategories = (categories, parentId = null) => {
 		category = categories.filter(cat => cat.parentId == undefined)
 	} else {
 		//bring the categories with parentID in them.
+		//basically the subcategories
 		category = categories.filter(cat => cat.parentId == parentId)
 	}
 
@@ -70,7 +70,7 @@ const createCategories = (categories, parentId = null) => {
 			slug: cate.slug,
 			//add the children.
 			//this one handles all the children of the parent categories.
-			//i.e categories with their children.
+			//i.e categories with their subcategories.
 			children: createCategories(categories, cate._id),
 		})
 	}
@@ -78,9 +78,10 @@ const createCategories = (categories, parentId = null) => {
 	//return the category list.
 	return categoryList
 }
+
 //function to get the categories.
 exports.getCategories = (req, res) => {
-	//passing an empty object will return all the data.
+	//passing an empty object in the find function will return all the data.
 	Category.find({}).exec((error, categories) => {
 		//handle the error.
 		if (error) {
@@ -90,6 +91,8 @@ exports.getCategories = (req, res) => {
 		//return all the cctegories.
 		if (categories) {
 			//create a variable to call the recursive function.
+			//so the categories will be sorted
+			//either parent or subcat
 			const categoryList = createCategories(categories)
 			return res.status(200).json({
 				categoryList,
